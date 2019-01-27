@@ -53,6 +53,25 @@ type PointTag
 
 
 {-| -}
+pointTags : List PointTag
+pointTags =
+    [ OriginTag
+    , FromOnePointTag
+    ]
+
+
+{-| -}
+tagFromPoint : Point -> PointTag
+tagFromPoint (Point info) =
+    case info of
+        Origin _ ->
+            OriginTag
+
+        FromOnePoint _ ->
+            FromOnePointTag
+
+
+{-| -}
 encodePoint : Point -> Value
 encodePoint (Point info) =
     case info of

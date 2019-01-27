@@ -14,6 +14,8 @@ module Input exposing (Point)
 
 @generate-info-type PointInfo
 @generate-tag-type PointTag
+@generate-tags pointTags
+@generate-tag-from-type tagFromPoint
 @generate-json-encode encodePoint
 @generate-json-decoder pointDecoder
 

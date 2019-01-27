@@ -61,6 +61,25 @@ type PointTag
     | FromOnePointTag
 
 
+{-| -}
+pointTags : List PointTag
+pointTags =
+    [ OriginTag
+    , FromOnePointTag
+    ]
+
+
+{-| -}
+tagFromPoint : Point -> PointTag
+tagFromPoint (Point info) =
+    case info of
+        Origin _ ->
+            OriginTag
+
+        FromOnePoint _ ->
+            FromOnePointTag
+
+
 type Pattern
     = Pattern
         { points : Dict Int Point
