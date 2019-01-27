@@ -2,6 +2,7 @@ module PatternModified exposing
     ( Pattern(..), empty
     , insertPoint
     , origin, fromOnePoint
+    , A
     , Point, PointInfo(..), PointTag(..)
     , encodePoint
     , pointDecoder
@@ -13,6 +14,8 @@ module PatternModified exposing
 @docs insertPoint
 
 @docs origin, fromOnePoint
+
+@docs A
 
 @docs Point, PointInfo, PointTag
 
@@ -36,6 +39,8 @@ import Json.Encode as Encode exposing (Value)
 import Json.Encode.CodeGeneration as Encode
 
 
+{-| This type represents either an `object` or a reference to an `object`.
+-}
 type A object
     = That Int
     | This object

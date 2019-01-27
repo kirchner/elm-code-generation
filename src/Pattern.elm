@@ -1,10 +1,13 @@
 module Pattern exposing
-    ( Point, PointInfo(..), PointTag(..)
+    ( A
+    , Point, PointInfo(..), PointTag(..)
     , encodePoint
     , pointDecoder
     )
 
 {-|
+
+@docs A
 
 @docs Point, PointInfo, PointTag
 
@@ -27,6 +30,8 @@ import Json.Encode as Encode exposing (Value)
 import Json.Encode.CodeGeneration as Encode
 
 
+{-| This type represents either an `object` or a reference to an `object`.
+-}
 type A object
     = That Int
     | This object
