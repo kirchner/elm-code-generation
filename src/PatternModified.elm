@@ -162,12 +162,12 @@ pointDecoder =
             |> Decode.required "x" Decode.float
             |> Decode.required "y" Decode.float
             |> Decode.map Origin
-            |> Decode.withType "origin"
+            |> Decode.ensureType "origin"
         , Decode.succeed FromOnePointStuff
             |> Decode.required "basePoint" (Decode.lazy (\_ -> pointDecoder))
             |> Decode.required "angle" Decode.float
             |> Decode.required "distance" Decode.float
             |> Decode.map FromOnePoint
-            |> Decode.withType "fromOnePoint"
+            |> Decode.ensureType "fromOnePoint"
         ]
         |> Decode.map Point
