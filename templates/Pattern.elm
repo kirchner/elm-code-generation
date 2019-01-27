@@ -22,6 +22,10 @@ import Json.Encode.CodeGeneration as Encode
 
 
 {-| This type represents either an `object` or a reference to an `object`.
+
+@rule-json-encode encodeA
+@rule-json-decoder aDecoder
+
 -}
 type A object
     = That Int
