@@ -3,9 +3,7 @@ module PatternModified exposing
     , insertPoint
     , origin, fromOnePoint
     , A
-    , Point, PointInfo(..), PointTag(..)
-    , encodePoint
-    , pointDecoder
+    , Point, PointInfo(..)
     )
 
 {-|
@@ -17,17 +15,7 @@ module PatternModified exposing
 
 @docs A
 
-@docs Point, PointInfo, PointTag
-
-
-# Encode
-
-@docs encodePoint
-
-
-# Decoder
-
-@docs pointDecoder
+@docs Point, PointInfo
 
 -}
 
@@ -65,13 +53,11 @@ type PointInfo
         }
 
 
-{-| -}
 type PointTag
     = OriginTag
     | FromOnePointTag
 
 
-{-| -}
 pointTags : List PointTag
 pointTags =
     [ OriginTag
@@ -79,7 +65,6 @@ pointTags =
     ]
 
 
-{-| -}
 tagFromPoint : Point -> PointTag
 tagFromPoint (Point info) =
     case info of
@@ -135,7 +120,6 @@ fromOnePoint aPoint angle distance =
             }
 
 
-{-| -}
 encodePoint : Point -> Value
 encodePoint (Point info) =
     case info of
@@ -166,7 +150,6 @@ type alias FromOnePointStuff =
     }
 
 
-{-| -}
 pointDecoder : Decoder Point
 pointDecoder =
     Decode.oneOf

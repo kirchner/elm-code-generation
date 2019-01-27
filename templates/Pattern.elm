@@ -9,9 +9,6 @@ module Pattern exposing
 
 @docs Point
 
-@generate-docs-json-encode
-@generate-docs-json-decoder
-
 -}
 
 
@@ -28,7 +25,7 @@ type A object
 
 {-| This type represents a point.
 
-@generate-type-internal PointInfo
+@generate-type-internal @expose-constructors PointInfo
 @generate-type-tag PointTag
 @generate-function-tags pointTags
 @generate-function-tag-from-type tagFromPoint
