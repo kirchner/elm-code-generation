@@ -1,4 +1,10 @@
 {
+  "source-directories": [
+    {
+      "input": "templates",
+      "output": "src"
+    }
+  ],
   "rules": [
     {
       "type": "A object",
