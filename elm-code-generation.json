@@ -7,7 +7,10 @@
   ],
   "rules": [
     {
-      "type": "A object",
+      "type": {
+        "module": "Pattern",
+        "type": "A object"
+      },
       "encode": "Pattern.encodeA",
       "decoder": "Pattern.aDecoder"
     }
