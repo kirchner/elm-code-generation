@@ -36,6 +36,11 @@ import Json.Encode as Encode exposing (Value)
 import Json.Encode.CodeGeneration as Encode
 
 
+type A object
+    = That Int
+    | This object
+
+
 {-| This type represents a point.
 -}
 type Point
@@ -49,7 +54,7 @@ type PointInfo
         , y : Float
         }
     | FromOnePoint
-        { basePoint : Point
+        { basePoint : A Point
         , angle : Float
         , distance : Float
         }
@@ -95,13 +100,15 @@ empty =
         }
 
 
-insertPoint : Point -> Pattern -> Pattern
+insertPoint : Point -> Pattern -> ( A Point, Pattern )
 insertPoint point (Pattern data) =
-    Pattern
+    ( That data.nextPointId
+    , Pattern
         { data
             | points = Dict.insert data.nextPointId point data.points
             , nextPointId = 1 + data.nextPointId
         }
+    )
 
 
 origin : Float -> Float -> Point
@@ -113,11 +120,11 @@ origin x y =
             }
 
 
-fromOnePoint : Point -> Float -> Float -> Point
-fromOnePoint basePoint angle distance =
+fromOnePoint : A Point -> Float -> Float -> Point
+fromOnePoint aPoint angle distance =
     Point <|
         FromOnePoint
-            { basePoint = basePoint
+            { basePoint = aPoint
             , angle = angle
             , distance = distance
             }
@@ -135,7 +142,7 @@ encodePoint (Point info) =
 
         FromOnePoint stuff ->
             Encode.withType "fromOnePoint"
-                [ ( "basePoint", encodePoint stuff.basePoint )
+                [ ( "basePoint", encodeA encodePoint stuff.basePoint )
                 , ( "angle", Encode.float stuff.angle )
                 , ( "distance", Encode.float stuff.distance )
                 ]
@@ -148,7 +155,7 @@ type alias OriginStuff =
 
 
 type alias FromOnePointStuff =
-    { basePoint : Point
+    { basePoint : A Point
     , angle : Float
     , distance : Float
     }
@@ -164,10 +171,34 @@ pointDecoder =
             |> Decode.map Origin
             |> Decode.ensureType "origin"
         , Decode.succeed FromOnePointStuff
-            |> Decode.required "basePoint" (Decode.lazy (\_ -> pointDecoder))
+            |> Decode.required "basePoint" (Decode.lazy (\_ -> aDecoder pointDecoder))
             |> Decode.required "angle" Decode.float
             |> Decode.required "distance" Decode.float
             |> Decode.map FromOnePoint
             |> Decode.ensureType "fromOnePoint"
         ]
         |> Decode.map Point
+
+
+encodeA : (object -> Value) -> A object -> Value
+encodeA encodeObject aObject =
+    case aObject of
+        That id ->
+            Encode.withType "that"
+                [ ( "name", Encode.int id ) ]
+
+        This object ->
+            Encode.withType "this"
+                [ ( "object", encodeObject object ) ]
+
+
+aDecoder : Decoder object -> Decoder (A object)
+aDecoder objectDecoder =
+    Decode.oneOf
+        [ Decode.succeed That
+            |> Decode.required "id" Decode.int
+            |> Decode.ensureType "that"
+        , Decode.succeed This
+            |> Decode.required "object" objectDecoder
+            |> Decode.ensureType "this"
+        ]

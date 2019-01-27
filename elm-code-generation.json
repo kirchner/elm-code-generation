@@ -1,0 +1,9 @@
+{
+  "rules": [
+    {
+      "type": "A object",
+      "encode": "Pattern.encodeA",
+      "decoder": "Pattern.aDecoder"
+    }
+  ]
+}
