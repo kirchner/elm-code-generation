@@ -1,8 +1,0 @@
-{
-  "source-directories": [
-    {
-      "input": "templates",
-      "output": "src"
-    }
-  ]
-}
