@@ -1,10 +1,18 @@
-module Output exposing
-    ( Point, PointInfo(..), PointTag(..)
+module PatternModified exposing
+    ( Pattern(..), empty
+    , insertPoint
+    , origin, fromOnePoint
+    , Point, PointInfo(..), PointTag(..)
     , encodePoint
     , pointDecoder
     )
 
 {-|
+
+@docs Pattern, empty
+@docs insertPoint
+
+@docs origin, fromOnePoint
 
 @docs Point, PointInfo, PointTag
 
@@ -20,6 +28,7 @@ module Output exposing
 
 -}
 
+import Dict exposing (Dict)
 import Json.Decode as Decode exposing (Decoder)
 import Json.Decode.CodeGeneration as Decode
 import Json.Decode.Pipeline as Decode
@@ -69,6 +78,49 @@ tagFromPoint (Point info) =
 
         FromOnePoint _ ->
             FromOnePointTag
+
+
+type Pattern
+    = Pattern
+        { points : Dict Int Point
+        , nextPointId : Int
+        }
+
+
+empty : Pattern
+empty =
+    Pattern
+        { points = Dict.empty
+        , nextPointId = 0
+        }
+
+
+insertPoint : Point -> Pattern -> Pattern
+insertPoint point (Pattern data) =
+    Pattern
+        { data
+            | points = Dict.insert data.nextPointId point data.points
+            , nextPointId = 1 + data.nextPointId
+        }
+
+
+origin : Float -> Float -> Point
+origin x y =
+    Point <|
+        Origin
+            { x = x
+            , y = y
+            }
+
+
+fromOnePoint : Point -> Float -> Float -> Point
+fromOnePoint basePoint angle distance =
+    Point <|
+        FromOnePoint
+            { basePoint = basePoint
+            , angle = angle
+            , distance = distance
+            }
 
 
 {-| -}

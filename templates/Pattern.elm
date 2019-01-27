@@ -1,4 +1,4 @@
-module Input exposing (Point)
+module Pattern exposing (Point)
 
 {-|
 
