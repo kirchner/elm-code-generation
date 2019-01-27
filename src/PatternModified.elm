@@ -8,10 +8,19 @@ module PatternModified exposing
 
 {-|
 
+
+# Pattern
+
 @docs Pattern, empty
 @docs insertPoint
 
+
+# Construct
+
 @docs origin, fromOnePoint
+
+
+# Objects
 
 @docs A
 
@@ -25,6 +34,63 @@ import Json.Decode.CodeGeneration as Decode
 import Json.Decode.Pipeline as Decode
 import Json.Encode as Encode exposing (Value)
 import Json.Encode.CodeGeneration as Encode
+
+
+
+---- PATTERN
+
+
+type Pattern
+    = Pattern
+        { points : Dict Int Point
+        , nextPointId : Int
+        }
+
+
+empty : Pattern
+empty =
+    Pattern
+        { points = Dict.empty
+        , nextPointId = 0
+        }
+
+
+insertPoint : Point -> Pattern -> ( A Point, Pattern )
+insertPoint point (Pattern data) =
+    ( That data.nextPointId
+    , Pattern
+        { data
+            | points = Dict.insert data.nextPointId point data.points
+            , nextPointId = 1 + data.nextPointId
+        }
+    )
+
+
+
+---- CONSTRUCT
+
+
+origin : Float -> Float -> Point
+origin x y =
+    Point <|
+        Origin
+            { x = x
+            , y = y
+            }
+
+
+fromOnePoint : A Point -> Float -> Float -> Point
+fromOnePoint aPoint angle distance =
+    Point <|
+        FromOnePoint
+            { basePoint = aPoint
+            , angle = angle
+            , distance = distance
+            }
+
+
+
+---- OBJECTS
 
 
 {-| This type represents either an `object` or a reference to an `object`.
@@ -73,51 +139,6 @@ tagFromPoint (Point info) =
 
         FromOnePoint _ ->
             FromOnePointTag
-
-
-type Pattern
-    = Pattern
-        { points : Dict Int Point
-        , nextPointId : Int
-        }
-
-
-empty : Pattern
-empty =
-    Pattern
-        { points = Dict.empty
-        , nextPointId = 0
-        }
-
-
-insertPoint : Point -> Pattern -> ( A Point, Pattern )
-insertPoint point (Pattern data) =
-    ( That data.nextPointId
-    , Pattern
-        { data
-            | points = Dict.insert data.nextPointId point data.points
-            , nextPointId = 1 + data.nextPointId
-        }
-    )
-
-
-origin : Float -> Float -> Point
-origin x y =
-    Point <|
-        Origin
-            { x = x
-            , y = y
-            }
-
-
-fromOnePoint : A Point -> Float -> Float -> Point
-fromOnePoint aPoint angle distance =
-    Point <|
-        FromOnePoint
-            { basePoint = aPoint
-            , angle = angle
-            , distance = distance
-            }
 
 
 encodePoint : Point -> Value
